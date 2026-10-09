@@ -1,0 +1,2040 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>Последний урок</title>
+    <style>
+        html {
+            color-scheme: dark;
+            background: #0d1a17
+        }
+
+        body {
+            margin: 0
+        }
+    </style>
+</head>
+
+<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Literata:wght@400;600&family=Marck+Script&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Layout: a classroom at dusk. Chalkboard hero in a wooden frame with a tray,
+   pinned notebook cards, a handwritten letter, a cork board for notes.
+   Chalk white and chalk yellow on deep green; red pen on blue-lined paper. */
+        :root {
+            --bg: #0d1a17;
+            --board: #1e3d36;
+            --board2: #142b26;
+            --chalk: #f3f1e7;
+            --chalk-dim: #b4c4ba;
+            --yellow: #f6d365;
+            --pink: #ff9fb0;
+            --sky: #8ecbff;
+            --green: #8fdcae;
+            --wood1: #b98250;
+            --wood2: #7a4d2a;
+            --wood3: #9a6639;
+            --paper: #f2f7fc;
+            --ink: #1c2a48;
+            --ink-dim: #51618a;
+            --red: #d23b34;
+            --rule: rgba(70, 110, 170, .22);
+            --cork: #a97b4b;
+            --edge: rgba(255, 255, 255, .16);
+            --shadow: rgba(0, 0, 0, .45);
+            --n1: #fff1a8;
+            --n2: #cfe6ff;
+            --n3: #ffd6d0;
+            --n4: #d6f2d8;
+            --f-display: 'Marck Script', 'Segoe Script', 'Bradley Hand', cursive;
+            --f-body: 'Literata', Georgia, 'Times New Roman', serif;
+            --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+            color-scheme: dark;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--chalk);
+            font-family: var(--f-body);
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            padding-inline: 16px;
+            overflow-x: hidden;
+        }
+
+        /* lamp light and soft noise live on fixed layers behind everything */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(900px 520px at 88% -8%, rgba(255, 184, 107, .20), transparent 62%),
+                radial-gradient(760px 520px at -6% 24%, rgba(70, 200, 170, .13), transparent 62%),
+                radial-gradient(600px 420px at 70% 100%, rgba(255, 159, 176, .07), transparent 65%);
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: .07;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 1080px;
+            margin-inline: auto
+        }
+
+        h1,
+        h2,
+        h3,
+        p,
+        ul,
+        figure {
+            margin: 0
+        }
+
+        ul {
+            padding: 0;
+            list-style: none
+        }
+
+        a {
+            color: inherit
+        }
+
+        button {
+            font: inherit;
+            color: inherit
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--sky);
+            outline-offset: 3px;
+            border-radius: 4px
+        }
+
+        .sr {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap
+        }
+
+        .ico {
+            width: 1.2em;
+            height: 1.2em;
+            flex: none;
+            vertical-align: -.2em
+        }
+
+        .mono {
+            font-family: var(--f-mono);
+            font-size: .76rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--chalk-dim)
+        }
+
+        canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none
+        }
+
+        #dust {
+            z-index: 0
+        }
+
+        #fx {
+            z-index: 50
+        }
+
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            z-index: 70;
+            background: linear-gradient(90deg, var(--yellow), var(--pink), var(--sky));
+            box-shadow: 0 0 12px rgba(246, 211, 101, .6)
+        }
+
+        /* top bar */
+        .top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-block: 22px 6px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .brand .ico {
+            width: 1.7em;
+            height: 1.7em;
+            color: var(--yellow)
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 16px;
+            background: rgba(255, 255, 255, .05);
+            border: 1.5px dashed var(--chalk-dim);
+            border-radius: 999px;
+            cursor: pointer;
+            color: var(--chalk);
+            font-family: var(--f-mono);
+            font-size: .78rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            transition: background .2s, border-color .2s;
+        }
+
+        .pill .ico {
+            color: var(--yellow)
+        }
+
+        .pill:hover {
+            background: rgba(255, 255, 255, .1);
+            border-style: solid
+        }
+
+        /* language switch */
+        .lang {
+            display: inline-flex;
+            border: 1.5px solid var(--edge);
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, .05)
+        }
+
+        .lang button {
+            min-height: 44px;
+            min-width: 52px;
+            padding: 0 14px;
+            background: none;
+            border: 0;
+            cursor: pointer;
+            color: var(--chalk-dim);
+            font-family: var(--f-mono);
+            font-size: .8rem;
+            letter-spacing: .1em;
+            transition: background .2s, color .2s
+        }
+
+        .lang button[aria-pressed="true"] {
+            background: var(--yellow);
+            color: #2a2410;
+            font-weight: 500
+        }
+
+        /* hero board */
+        .hero {
+            padding-block: clamp(16px, 4vw, 40px) clamp(40px, 7vw, 80px)
+        }
+
+        .frame {
+            position: relative;
+            padding: clamp(10px, 2.2vw, 18px);
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--wood1), var(--wood2) 38%, var(--wood3) 68%, var(--wood2));
+            box-shadow: 0 30px 60px -24px var(--shadow), inset 0 2px 0 rgba(255, 255, 255, .28), inset 0 -3px 0 rgba(0, 0, 0, .35);
+        }
+
+        .slate {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            text-align: center;
+            padding: clamp(22px, 5vw, 48px) clamp(16px, 5vw, 56px) clamp(64px, 9vw, 80px);
+            background: radial-gradient(120% 90% at 30% 0%, #25493f, var(--board) 45%, var(--board2));
+            box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .25), inset 0 0 60px rgba(0, 0, 0, .35);
+        }
+
+        .slate::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: .5;
+            background: radial-gradient(60% 40% at 20% 30%, rgba(255, 255, 255, .10), transparent 70%), radial-gradient(50% 30% at 75% 70%, rgba(255, 255, 255, .07), transparent 70%);
+        }
+
+        .slate>* {
+            position: relative
+        }
+
+        .chalk-date {
+            text-align: left;
+            max-width: calc(100% - 96px)
+        }
+
+        .chalk-title {
+            display: block;
+            width: 100%;
+            max-width: 760px;
+            height: auto;
+            margin: clamp(4px, 1.5vw, 16px) auto 0;
+            overflow: visible
+        }
+
+        .write {
+            fill: transparent;
+            stroke: var(--chalk);
+            stroke-width: 2.4;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+            stroke-dasharray: 3200;
+            stroke-dashoffset: 3200;
+            font-family: var(--f-display);
+            font-size: 210px;
+            animation: write 3.2s .3s ease-in-out forwards, fillin 1s 2.8s ease forwards;
+        }
+
+        @keyframes write {
+            to {
+                stroke-dashoffset: 0
+            }
+        }
+
+        @keyframes fillin {
+            to {
+                fill: var(--chalk)
+            }
+        }
+
+        .chalk-name {
+            font-family: var(--f-display);
+            font-size: clamp(1.8rem, 6.5vw, 3.1rem);
+            line-height: 1.2;
+            color: var(--yellow);
+            overflow-wrap: anywhere;
+            margin-top: -6px;
+            animation: rise .9s 3.2s backwards;
+        }
+
+        .chalk-name span {
+            text-decoration: underline wavy rgba(246, 211, 101, .7);
+            text-decoration-thickness: 2px;
+            text-underline-offset: .16em
+        }
+
+        .chalk-lede {
+            max-width: 34em;
+            margin: 14px auto 0;
+            color: var(--chalk);
+            font-size: clamp(1.02rem, 2.6vw, 1.2rem);
+            animation: rise .9s 3.5s backwards
+        }
+
+        .doodle {
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1;
+            stroke-dashoffset: 1;
+            animation: draw 1.6s ease forwards
+        }
+
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0
+            }
+        }
+
+        .dd {
+            position: absolute;
+            pointer-events: none
+        }
+
+        .dd.heart {
+            left: 4%;
+            bottom: 14px;
+            width: clamp(30px, 6vw, 54px);
+            transform: rotate(-12deg)
+        }
+
+        .dd.heart .doodle {
+            stroke: var(--pink);
+            animation-delay: 3.9s
+        }
+
+        .dd.star {
+            right: 5%;
+            bottom: 16px;
+            width: clamp(28px, 5vw, 46px);
+            transform: rotate(10deg)
+        }
+
+        .dd.star .doodle {
+            stroke: var(--yellow);
+            animation-delay: 4.3s
+        }
+
+        .dd.wave {
+            left: 7%;
+            top: 30%;
+            width: clamp(44px, 8vw, 86px)
+        }
+
+        .dd.wave .doodle {
+            stroke: var(--sky);
+            animation-delay: 4.7s
+        }
+
+        .grade {
+            position: absolute;
+            top: clamp(10px, 2.5vw, 24px);
+            right: clamp(8px, 3vw, 30px);
+            width: clamp(74px, 15vw, 124px);
+            background: none;
+            border: 0;
+            padding: 0;
+            cursor: pointer;
+            transform: rotate(8deg)
+        }
+
+        .grade svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible
+        }
+
+        .grade .ring {
+            fill: none;
+            stroke: var(--pink);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 1;
+            stroke-dashoffset: 0
+        }
+
+        .grade text {
+            fill: var(--pink);
+            font-family: var(--f-display);
+            font-size: 58px
+        }
+
+        .grade.draw .ring {
+            animation: draw 1.3s 4s ease-out both;
+            stroke-dashoffset: 1
+        }
+
+        .grade.redraw .ring {
+            animation: ring 1.3s ease-out both
+        }
+
+        @keyframes ring {
+            from {
+                stroke-dashoffset: 1
+            }
+
+            to {
+                stroke-dashoffset: 0
+            }
+        }
+
+        .tray {
+            display: flex;
+            align-items: flex-end;
+            gap: clamp(10px, 3vw, 22px);
+            height: 22px;
+            margin-top: 8px;
+            padding-inline: clamp(14px, 4vw, 32px);
+            border-radius: 3px;
+            background: linear-gradient(#a46d3d, #6f4524);
+            box-shadow: 0 4px 0 rgba(0, 0, 0, .35), inset 0 2px 0 rgba(255, 255, 255, .25);
+        }
+
+        .tray>* {
+            margin-bottom: 20px;
+            flex: none
+        }
+
+        .tray .grow {
+            flex: 1
+        }
+
+        .chalkbit {
+            height: 14px;
+            width: auto;
+            margin-bottom: 21px
+        }
+
+        .eraser {
+            height: 24px;
+            width: auto
+        }
+
+        #apple {
+            display: block;
+            width: clamp(44px, 10vw, 60px);
+            padding: 0;
+            background: none;
+            border: 0;
+            cursor: pointer;
+            margin-bottom: 19px;
+            transform-origin: 50% 100%
+        }
+
+        #apple svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible
+        }
+
+        #apple.bounce {
+            animation: bounce .7s ease
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            30% {
+                transform: translateY(-30px) rotate(-8deg)
+            }
+
+            60% {
+                transform: translateY(0) scaleY(.92)
+            }
+
+            80% {
+                transform: translateY(-6px)
+            }
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-top: 28px
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 50px;
+            padding: 10px 24px;
+            background: var(--yellow);
+            color: #2a2410;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, .4), 0 10px 24px -10px rgba(246, 211, 101, .5);
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, .4), 0 14px 28px -10px rgba(246, 211, 101, .6)
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .4)
+        }
+
+        .btn.ghost {
+            background: rgba(255, 255, 255, .06);
+            color: var(--chalk);
+            border: 1.5px solid var(--edge);
+            box-shadow: none
+        }
+
+        .btn.ghost:hover {
+            background: rgba(255, 255, 255, .12);
+            box-shadow: none;
+            border-color: var(--chalk-dim)
+        }
+
+        #bellBtn.ring .ico {
+            animation: wiggle .5s ease 3
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(0)
+            }
+
+            25% {
+                transform: rotate(-18deg)
+            }
+
+            75% {
+                transform: rotate(18deg)
+            }
+        }
+
+        .name-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            max-width: 26em;
+            margin-top: 14px
+        }
+
+        .name-box label,
+        .form label {
+            font-family: var(--f-mono);
+            font-size: .74rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--chalk-dim)
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            min-height: 50px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, .07);
+            color: var(--chalk);
+            border: 1.5px solid var(--edge);
+            border-radius: 10px;
+            font: inherit;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--chalk-dim);
+            opacity: .8
+        }
+
+        .hint {
+            margin-top: 16px;
+            font-family: var(--f-mono);
+            font-size: .8rem;
+            color: var(--chalk-dim);
+            max-width: 40em
+        }
+
+        .hint .ico {
+            color: var(--yellow)
+        }
+
+        /* secret stars */
+        .secret {
+            position: relative;
+            display: inline-grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            background: none;
+            border: 0;
+            color: var(--chalk-dim);
+            opacity: .4;
+            cursor: pointer;
+            transition: transform .2s, opacity .2s, color .2s;
+        }
+
+        .secret::after {
+            content: "";
+            position: absolute;
+            inset: -9px
+        }
+
+        .secret svg {
+            width: 18px;
+            height: 18px
+        }
+
+        .secret:hover,
+        .secret:focus-visible {
+            opacity: 1;
+            transform: scale(1.3) rotate(14deg)
+        }
+
+        .secret.found {
+            opacity: 1;
+            color: var(--yellow)
+        }
+
+        .secret.found svg {
+            filter: drop-shadow(0 0 6px var(--yellow))
+        }
+
+        .paper .secret {
+            color: var(--ink-dim)
+        }
+
+        .paper .secret.found {
+            color: #d99a00
+        }
+
+        .slate .secret {
+            position: absolute;
+            right: 14px;
+            top: 50%
+        }
+
+        /* sections */
+        .sec {
+            padding-block: clamp(36px, 6vw, 76px)
+        }
+
+        .sec-head {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 34px;
+            max-width: 36em
+        }
+
+        h2 {
+            font-family: var(--f-display);
+            font-weight: 400;
+            font-size: clamp(2.1rem, 7.5vw, 3.6rem);
+            line-height: 1.06;
+            text-wrap: balance;
+            color: var(--chalk)
+        }
+
+        .sec-head p:not(.mono) {
+            color: var(--chalk-dim)
+        }
+
+        .sec-head h2 span {
+            color: var(--yellow)
+        }
+
+        /* pinned lesson cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 30px 24px
+        }
+
+        .card {
+            position: relative;
+            grid-column: span 2;
+            min-width: 0;
+            padding: 28px 22px 22px 52px;
+            color: var(--ink);
+            border-radius: 3px;
+            background-color: var(--paper);
+            background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
+            background-position: 0 20px;
+            box-shadow: 0 18px 30px -16px var(--shadow);
+            transform: rotate(var(--r, 0deg));
+            transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), box-shadow .35s;
+        }
+
+        .card:nth-child(n+4) {
+            grid-column: span 3
+        }
+
+        .card:nth-child(1) {
+            --r: -1.4deg
+        }
+
+        .card:nth-child(2) {
+            --r: 1deg
+        }
+
+        .card:nth-child(3) {
+            --r: -.6deg
+        }
+
+        .card:nth-child(4) {
+            --r: .9deg
+        }
+
+        .card:nth-child(5) {
+            --r: -1deg
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            left: 36px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(210, 59, 52, .5)
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            top: -13px;
+            left: 50%;
+            width: 96px;
+            height: 28px;
+            margin-left: -48px;
+            transform: rotate(-3deg);
+            background: rgba(246, 211, 101, .62);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+            clip-path: polygon(0 0, 100% 0, 97% 20%, 100% 40%, 97% 60%, 100% 80%, 98% 100%, 0 100%, 3% 80%, 0 60%, 3% 40%, 0 20%);
+        }
+
+        .card:hover {
+            transform: rotate(0deg) translateY(-8px);
+            box-shadow: 0 28px 38px -16px var(--shadow)
+        }
+
+        .card .cico {
+            position: absolute;
+            left: 7px;
+            top: 26px;
+            width: 24px;
+            height: 24px;
+            color: var(--red);
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        .card h3 {
+            font-family: var(--f-display);
+            font-weight: 400;
+            font-size: 1.65rem;
+            line-height: 32px;
+            margin-bottom: 0
+        }
+
+        .card h3 span {
+            background: linear-gradient(transparent 62%, rgba(255, 226, 122, .85) 62%);
+            padding-inline: 2px
+        }
+
+        .card p {
+            line-height: 32px;
+            color: #34436a
+        }
+
+        .card .tick {
+            position: absolute;
+            right: 12px;
+            top: 10px;
+            width: 30px;
+            height: 30px;
+            color: var(--red);
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        .card .tick path {
+            stroke-dasharray: 30;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset .7s ease .25s
+        }
+
+        .js .card:not(.in) .tick path {
+            stroke-dashoffset: 30
+        }
+
+        .card .corner {
+            position: absolute;
+            right: 10px;
+            bottom: 8px
+        }
+
+        /* letter */
+        .letter {
+            --pt: 46px;
+            position: relative;
+            max-width: 780px;
+            color: var(--ink);
+            border-radius: 3px;
+            padding: var(--pt) clamp(18px, 5vw, 56px) 40px clamp(48px, 9vw, 96px);
+            background-color: var(--paper);
+            background-image: repeating-linear-gradient(to bottom, transparent 0 34px, var(--rule) 34px 35px);
+            background-position: 0 var(--pt);
+            box-shadow: 0 30px 50px -22px var(--shadow);
+        }
+
+        .letter::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: clamp(34px, 7.5vw, 78px);
+            width: 2px;
+            background: rgba(210, 59, 52, .55)
+        }
+
+        .letter p {
+            font-family: var(--f-display);
+            font-size: clamp(1.3rem, 4.3vw, 1.75rem);
+            line-height: 35px;
+            overflow-wrap: anywhere
+        }
+
+        .letter .gap {
+            margin-top: 35px
+        }
+
+        .letter .sign {
+            color: var(--red);
+            font-size: clamp(1.6rem, 5.2vw, 2.2rem);
+            margin-top: 35px
+        }
+
+        .seal {
+            position: absolute;
+            top: -18px;
+            right: clamp(12px, 4vw, 40px);
+            width: 72px;
+            height: 72px;
+            filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .35))
+        }
+
+        .letter .secret {
+            position: absolute;
+            right: 16px;
+            bottom: 14px
+        }
+
+        /* stay */
+        .stay {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(22px, 5vw, 52px);
+            border-radius: 14px;
+            background: radial-gradient(90% 120% at 100% 0%, rgba(255, 159, 176, .18), transparent 60%), linear-gradient(160deg, var(--board), var(--board2));
+            border: 1.5px solid var(--edge);
+            box-shadow: 0 30px 50px -26px var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .stay .bigheart {
+            position: absolute;
+            right: -6%;
+            top: -10%;
+            width: min(60%, 380px);
+            color: var(--pink);
+            opacity: .14;
+            animation: beat 2.4s ease-in-out infinite
+        }
+
+        @keyframes beat {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            14% {
+                transform: scale(1.08)
+            }
+
+            28% {
+                transform: scale(1)
+            }
+
+            42% {
+                transform: scale(1.05)
+            }
+        }
+
+        .stay>* {
+            position: relative
+        }
+
+        .stay h2 {
+            font-size: clamp(2.8rem, 12vw, 5.6rem);
+            color: var(--yellow)
+        }
+
+        .stay>p:not(.mono):not(.note-line) {
+            max-width: 34em;
+            color: var(--chalk)
+        }
+
+        .play {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            width: 100%;
+            min-height: 170px;
+            padding: 12px;
+            border: 1.5px dashed var(--edge);
+            border-radius: 12px
+        }
+
+        #go {
+            position: relative;
+            z-index: 2;
+            transition: transform .35s cubic-bezier(.3, 1.5, .5, 1)
+        }
+
+        .note-line {
+            min-height: 1.6em;
+            font-family: var(--f-mono);
+            font-size: .8rem;
+            color: var(--chalk-dim)
+        }
+
+        .thanks {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 18px;
+            background: rgba(246, 211, 101, .16);
+            border: 1px solid rgba(246, 211, 101, .4);
+            border-radius: 10px
+        }
+
+        .thanks .ico {
+            color: var(--pink);
+            width: 1.5em;
+            height: 1.5em
+        }
+
+        .stay .secret {
+            position: absolute;
+            left: 14px;
+            bottom: 12px
+        }
+
+        /* cork wall */
+        .formcard {
+            padding: clamp(16px, 3vw, 26px);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .05);
+            border: 1.5px solid var(--edge);
+            margin-bottom: 12px
+        }
+
+        .form {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+            gap: 12px;
+            align-items: end
+        }
+
+        .form .f {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0
+        }
+
+        .form textarea {
+            min-height: 50px;
+            height: 50px;
+            resize: vertical
+        }
+
+        .mode {
+            font-family: var(--f-mono);
+            font-size: .78rem;
+            color: var(--chalk-dim);
+            margin-bottom: 20px
+        }
+
+        .cork {
+            padding: clamp(18px, 3.5vw, 34px);
+            border-radius: 10px;
+            min-height: 150px;
+            background-color: var(--cork);
+            background-image: radial-gradient(rgba(0, 0, 0, .18) 1px, transparent 1.5px), radial-gradient(rgba(255, 255, 255, .12) 1px, transparent 1.5px);
+            background-size: 9px 9px, 13px 13px;
+            background-position: 0 0, 4px 5px;
+            box-shadow: inset 0 0 0 8px var(--wood2), inset 0 0 0 10px rgba(255, 255, 255, .2), inset 0 6px 30px rgba(0, 0, 0, .4);
+        }
+
+        .wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+            gap: 26px 20px
+        }
+
+        .note {
+            position: relative;
+            margin: 0;
+            padding: 24px 16px 12px;
+            color: #2a2f45;
+            border-radius: 2px;
+            min-width: 0;
+            box-shadow: 0 12px 18px -10px rgba(0, 0, 0, .55);
+            transform: rotate(var(--r, 0deg));
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            animation: pin .5s cubic-bezier(.3, 1.5, .5, 1) backwards;
+        }
+
+        @keyframes pin {
+            from {
+                opacity: 0;
+                transform: translateY(-16px) rotate(calc(var(--r, 0deg) + 8deg))
+            }
+        }
+
+        .note::before {
+            content: "";
+            position: absolute;
+            top: 7px;
+            left: 50%;
+            width: 14px;
+            height: 14px;
+            margin-left: -7px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #ff8d86, #b02620);
+            box-shadow: 0 3px 3px rgba(0, 0, 0, .4)
+        }
+
+        .note p {
+            overflow-wrap: anywhere
+        }
+
+        .note figcaption {
+            font-family: var(--f-display);
+            font-size: 1.3rem;
+            color: var(--red)
+        }
+
+        .n1 {
+            background: var(--n1)
+        }
+
+        .n2 {
+            background: var(--n2)
+        }
+
+        .n3 {
+            background: var(--n3)
+        }
+
+        .n4 {
+            background: var(--n4)
+        }
+
+        .empty {
+            padding: 20px;
+            border: 1.5px dashed rgba(255, 255, 255, .4);
+            border-radius: 8px;
+            color: #fff;
+            background: rgba(0, 0, 0, .18)
+        }
+
+        /* hints */
+        details {
+            background: rgba(255, 255, 255, .05);
+            border: 1.5px solid var(--edge);
+            border-radius: 12px;
+            padding: 4px 22px
+        }
+
+        summary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 56px;
+            cursor: pointer;
+            font-weight: 600;
+            list-style: none
+        }
+
+        summary::-webkit-details-marker {
+            display: none
+        }
+
+        summary .ico {
+            color: var(--yellow)
+        }
+
+        details ul {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 4px 0 18px
+        }
+
+        details li {
+            display: flex;
+            gap: 10px;
+            color: var(--chalk)
+        }
+
+        details li .ico {
+            margin-top: .25em;
+            color: var(--pink)
+        }
+
+        .secret-card {
+            margin: 4px 0 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(246, 211, 101, .14);
+            border: 1px solid rgba(246, 211, 101, .4)
+        }
+
+        .secret-card h3 {
+            font-family: var(--f-display);
+            font-weight: 400;
+            font-size: 1.8rem;
+            color: var(--yellow)
+        }
+
+        footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            padding-block: 40px 60px;
+            border-top: 1.5px dashed var(--edge)
+        }
+
+        footer .display {
+            font-family: var(--f-display);
+            font-size: clamp(1.7rem, 5.5vw, 2.4rem);
+            color: var(--yellow)
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+            transform: translate(-50%, 24px);
+            z-index: 80;
+            max-width: calc(100% - 32px);
+            padding: 12px 18px;
+            background: var(--chalk);
+            color: #14231e;
+            border-radius: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s, transform .25s;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0)
+        }
+
+        .rise {
+            animation: rise .9s cubic-bezier(.2, .8, .2, 1) var(--d, 0s) backwards
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(18px)
+            }
+        }
+
+        @media (max-width:820px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+
+            .card,
+            .card:nth-child(n+4) {
+                grid-column: span 1
+            }
+
+            .card:last-child {
+                grid-column: span 2
+            }
+        }
+
+        @media (max-width:600px) {
+            .cards {
+                grid-template-columns: minmax(0, 1fr)
+            }
+
+            .card,
+            .card:nth-child(n+4),
+            .card:last-child {
+                grid-column: span 1
+            }
+
+            .form {
+                grid-template-columns: minmax(0, 1fr)
+            }
+
+            .form .btn {
+                width: 100%
+            }
+
+            .dd.star,
+            .dd.wave {
+                display: none
+            }
+
+            .chalk-date {
+                max-width: calc(100% - 84px)
+            }
+
+            .hero-actions .btn {
+                flex: 1 1 100%
+            }
+        }
+
+        /* slow, gentle reveal on scroll */
+        .js .reveal:not(.in) {
+            opacity: 0
+        }
+
+        .reveal.in {
+            animation: revealUp 1.5s cubic-bezier(.16, .8, .24, 1) var(--rd, 0s) backwards
+        }
+
+        @keyframes revealUp {
+            from {
+                opacity: 0;
+                translate: 0 56px
+            }
+        }
+
+        .cue {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 22px;
+            font-family: var(--f-mono);
+            font-size: .78rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--chalk-dim);
+            text-decoration: none
+        }
+
+        .cue svg {
+            width: 20px;
+            height: 20px;
+            animation: cue 2.6s ease-in-out infinite
+        }
+
+        @keyframes cue {
+
+            0%,
+            100% {
+                transform: translateY(-3px);
+                opacity: .6
+            }
+
+            50% {
+                transform: translateY(5px);
+                opacity: 1
+            }
+        }
+
+        @media (max-width:480px) {
+            .eraser {
+                display: none
+            }
+        }
+
+        @media (max-width:360px) {
+            .tray>svg:nth-of-type(3) {
+                display: none
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important
+            }
+
+            .write {
+                stroke-dashoffset: 0 !important;
+                fill: var(--chalk) !important
+            }
+
+            .doodle,
+            .grade .ring {
+                stroke-dashoffset: 0 !important
+            }
+        }
+    </style>
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <filter id="rough">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3" result="n" />
+                <feDisplacementMap in="SourceGraphic" in2="n" scale="3" />
+            </filter>
+        </defs>
+        <symbol id="i-star" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" />
+        </symbol>
+        <symbol id="i-heart" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.7 1.1 5.3 3 1.6-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.3C19.5 16.4 12 21 12 21z" />
+        </symbol>
+        <symbol id="i-pencil" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                d="M4 20l1-4L16.5 4.5a2.1 2.1 0 013 3L8 19zM14.5 6.5l3 3" />
+        </symbol>
+        <symbol id="i-cap" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                d="M2 9l10-5 10 5-10 5zM6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5M22 9v6" />
+        </symbol>
+        <symbol id="i-send" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                d="M3 11.5L21 3l-6.5 18-3-7.5zM11.5 13.5L21 3" />
+        </symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                d="M6 16v-5a6 6 0 0112 0v5l2 2H4zM10 21a2 2 0 004 0" />
+        </symbol>
+        <symbol id="i-bulb" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z" />
+        </symbol>
+        <symbol id="i-flag" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                d="M5 21V4M5 4h11l-2 4 2 4H5" />
+        </symbol>
+        <symbol id="i-book" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5C4.7 19 4 18.3 4 17.5zM20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5-.7 1.5-1.5z" />
+        </symbol>
+    </svg>
+
+    <div id="progress"></div>
+    <canvas id="dust" aria-hidden="true"></canvas>
+    <canvas id="fx" aria-hidden="true"></canvas>
+
+    <div class="wrap">
+        <header class="top">
+            <div class="brand mono"><svg class="ico">
+                    <use href="#i-cap" />
+                </svg><span data-i="brand">Последний урок</span></div>
+            <div class="lang" role="group" aria-label="Til / Язык"><button type="button" data-lang="ru"
+                    aria-pressed="true">РУ</button><button type="button" data-lang="uz" aria-pressed="false">UZ</button>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero" id="top">
+                <div class="frame rise">
+                    <div class="slate">
+                        <p class="mono chalk-date" data-i="date">Пятница · 9 октября<br>последний урок</p>
+                        <h1 class="sr" data-i="h1">Спасибо, <span>Хурмадбек</span>.</h1>
+                        <svg class="chalk-title" viewBox="0 0 900 260" aria-hidden="true"><text class="write" x="450"
+                                y="195" text-anchor="middle" filter="url(#rough)" data-i="thanks">Спасибо</text></svg>
+                        <p class="chalk-name"><span data-i="nm">Хурмадбек</span></p>
+                        <p class="chalk-lede" data-i="lede">Вы научили меня так многому. Сегодня ваш последний день, и
+                            мне хочется, чтобы его запомнили не из-за увольнения, а из-за того, сколько вы успели дать.
+                        </p>
+
+                        <svg class="dd heart" viewBox="0 0 24 24" aria-hidden="true">
+                            <path class="doodle" pathLength="1"
+                                d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.7 1.1 5.3 3 1.6-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.3C19.5 16.4 12 21 12 21z" />
+                        </svg>
+                        <svg class="dd star" viewBox="0 0 24 24" aria-hidden="true">
+                            <path class="doodle" pathLength="1"
+                                d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" />
+                        </svg>
+                        <svg class="dd wave" viewBox="0 0 28 24" aria-hidden="true">
+                            <path class="doodle" pathLength="1" d="M2 12c4-8 8 8 12 0s8 8 12 0" />
+                        </svg>
+
+                        <button class="grade draw" id="grade" type="button" aria-label="Нарисовать оценку заново"
+                            data-ia="gradeAria">
+                            <svg viewBox="0 0 150 96" aria-hidden="true">
+                                <path class="ring" pathLength="1"
+                                    d="M24 52C20 24 62 10 100 14c34 4 46 28 28 54-18 22-78 26-100 2-10-10-6-24 6-34" />
+                                <text x="75" y="68" text-anchor="middle">5+</text>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="tray">
+                        <svg class="chalkbit" viewBox="0 0 44 14" aria-hidden="true">
+                            <rect x="1" y="2" width="42" height="10" rx="4" fill="#f3f1e7" />
+                            <rect x="1" y="2" width="12" height="10" rx="4" fill="#d9d5c4" />
+                        </svg>
+                        <svg class="chalkbit" viewBox="0 0 34 14" aria-hidden="true">
+                            <rect x="1" y="2" width="32" height="10" rx="4" fill="#ff9fb0" />
+                            <rect x="1" y="2" width="9" height="10" rx="4" fill="#e07a8d" />
+                        </svg>
+                        <svg class="chalkbit" viewBox="0 0 40 14" aria-hidden="true">
+                            <rect x="1" y="2" width="38" height="10" rx="4" fill="#f6d365" />
+                            <rect x="1" y="2" width="10" height="10" rx="4" fill="#d9b44a" />
+                        </svg>
+                        <svg class="eraser" viewBox="0 0 64 24" aria-hidden="true">
+                            <rect x="0" y="6" width="64" height="18" rx="4" fill="#2c3f6e" />
+                            <rect x="0" y="0" width="64" height="10" rx="4" fill="#d9d2b4" />
+                            <rect x="0" y="6" width="64" height="4" fill="#bfb792" />
+                        </svg>
+                        <span class="grow"></span>
+                        <button id="apple" type="button" aria-label="Яблоко для учителя" data-ia="appleAria">
+                            <svg viewBox="0 0 64 72" aria-hidden="true">
+                                <path
+                                    d="M32 18C24 8 6 12 7 34c1 20 14 34 24 30 3-1.5 5-1.5 8 0 10 4 23-10 24-30 1-22-17-26-25-16z"
+                                    fill="#e0453d" />
+                                <path d="M32 18C32 12 34 7 38 3" fill="none" stroke="#3b2a1a" stroke-width="3"
+                                    stroke-linecap="round" />
+                                <path d="M36 11C43 3 53 4 56 8 52 16 42 17 36 11z" fill="#8fdcae" />
+                                <path d="M16 28c-3 6-3 14 0 20" fill="none" stroke="#fff" stroke-opacity=".5"
+                                    stroke-width="3.5" stroke-linecap="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-actions rise" style="--d:.5s">
+                    <a class="btn" href="#letter" data-i="readLetter">Прочитать письмо</a>
+                </div>
+                <a class="cue rise" style="--d:.8s" href="#lessons"><span data-i="scrollDown">Листайте вниз</span><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg></a>
+            </section>
+
+            <section class="sec" id="lessons">
+                <div class="sec-head">
+                    <p class="mono" data-i="l_eyebrow">Табель</p>
+                    <h2 data-i="l_h2">Чему вы меня <span>научили</span></h2>
+                    <p data-i="l_p">Пять уроков, которых нет ни в одном учебнике.</p>
+                </div>
+                <ul class="cards paper">
+                    <li class="card"><svg class="cico">
+                            <use href="#i-pencil" />
+                        </svg><svg class="tick" viewBox="0 0 34 34" aria-hidden="true">
+                            <path d="M5 18l8 8L29 7" />
+                        </svg>
+                        <h3><span data-i="c1t">Не бояться ошибок</span></h3>
+                        <p data-i="c1p">С вами ошибка перестала быть страшной. Это просто шаг к правильному ответу.</p>
+                    </li>
+                    <li class="card"><svg class="cico">
+                            <use href="#i-bulb" />
+                        </svg><svg class="tick" viewBox="0 0 34 34" aria-hidden="true">
+                            <path d="M5 18l8 8L29 7" />
+                        </svg>
+                        <h3><span data-i="c2t">Думать самому</span></h3>
+                        <p data-i="c2p">Вы редко давали готовые ответы. Вы задавали вопрос, и ответ находился сам.</p>
+                    </li>
+                    <li class="card"><svg class="cico">
+                            <use href="#i-flag" />
+                        </svg><svg class="tick" viewBox="0 0 34 34" aria-hidden="true">
+                            <path d="M5 18l8 8L29 7" />
+                        </svg>
+                        <h3><span data-i="c3t">Не сдаваться</span></h3>
+                        <p data-i="c3p">Когда ничего не получалось, вы оставались рядом и говорили: давай ещё раз.</p>
+                    </li>
+                    <li class="card"><svg class="cico">
+                            <use href="#i-star" />
+                        </svg><svg class="tick" viewBox="0 0 34 34" aria-hidden="true">
+                            <path d="M5 18l8 8L29 7" />
+                        </svg>
+                        <h3><span data-i="c4t">Верить в себя</span></h3>
+                        <p data-i="c4p">Рядом с вами впервые появилось ощущение, что я справлюсь.</p>
+                    </li>
+                    <li class="card"><svg class="cico">
+                            <use href="#i-book" />
+                        </svg><svg class="tick" viewBox="0 0 34 34" aria-hidden="true">
+                            <path d="M5 18l8 8L29 7" />
+                        </svg>
+                        <h3><span data-i="c5t">Любить то, что учишь</span></h3>
+                        <p data-i="c5p">Вы показали, что знания бывают интересными, а не только обязательными.</p>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="sec" id="letter">
+                <div class="sec-head">
+                    <p class="mono" data-i="m_eyebrow">Письмо</p>
+                    <h2 data-i="m_h2">Что я хотел <span>сказать</span></h2>
+                </div>
+                <div class="letter paper" id="thread">
+                    <svg class="seal" viewBox="0 0 72 72" aria-hidden="true">
+                        <circle cx="36" cy="36" r="32" fill="#c8332c" />
+                        <circle cx="36" cy="36" r="25" fill="none" stroke="#e8625b" stroke-width="2"
+                            stroke-dasharray="3 3" />
+                        <g transform="translate(20 20) scale(1.33)" fill="#8f1f1a">
+                            <path
+                                d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.7 1.1 5.3 3 1.6-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.3C19.5 16.4 12 21 12 21z" />
+                        </g>
+                    </svg>
+                    <p data-i="m0">Дорогой <span>Хурмадбек</span>!</p>
+                    <p data-i="m1">Сегодня ваш последний день здесь.</p>
+                    <p data-i="m2">Слов не хватает, но я всё равно попробую.</p>
+                    <p data-i="m3">Вы учили не по учебнику. Вы учили слушать, думать и не бояться.</p>
+                    <p data-i="m4">Я запомню каждый урок.</p>
+                    <p data-i="m5">Что бы ни решили другие, для меня вы настоящий учитель.</p>
+                    <p data-i="m6">И пожалуйста, не пропадайте. Заходите в гости.</p>
+                    <p class="sign" data-i="sign">Ваш ученик</p>
+                </div>
+            </section>
+
+            <section class="sec" id="stay">
+                <div class="stay">
+                    <svg class="bigheart" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#i-heart" />
+                    </svg>
+                    <p class="mono" data-i="s_eyebrow">Просьба</p>
+                    <h2 data-i="s_h2">Не уходите</h2>
+                    <p data-i="s_p">Не совсем. Заходите, пишите, приходите на любой урок. Для вас здесь всегда найдётся
+                        место.</p>
+                    <div class="play" id="play">
+                        <button class="btn" id="stayBtn" type="button"><svg class="ico">
+                                <use href="#i-heart" />
+                            </svg><span data-i="stayBtn">Остаться с нами</span></button>
+                        <button class="btn ghost" id="go" type="button">Уйти</button>
+                    </div>
+                    <p class="note-line" id="stayNote" aria-live="polite"></p>
+                    <div class="thanks" id="thanks" hidden><svg class="ico">
+                            <use href="#i-heart" />
+                        </svg><span data-i="thanksMsg">Спасибо. Мы будем ждать вас.</span></div>
+                </div>
+            </section>
+
+            <section class="sec" id="wall">
+                <div class="sec-head">
+                    <p class="mono" data-i="w_eyebrow">Доска записок</p>
+                    <h2 data-i="w_h2">Напишите своё <span>слово</span></h2>
+                    <p data-i="w_p">Короткая записка для учителя. Она появится на доске ниже.</p>
+                </div>
+                <div class="formcard">
+                    <form class="form" id="form" autocomplete="off">
+                       
+                        <div class="f"><label for="wtext" data-i="w_note">Записка</label><textarea id="wtext"
+                                maxlength="280" rows="1" placeholder="Что вы хотите сказать?"
+                                data-ip="w_noteph"></textarea></div>
+                        <button class="btn" type="submit"><svg class="ico">
+                                <use href="#i-send" />
+                            </svg><span data-i="w_btn">Прикрепить</span></button>
+                    </form>
+                </div>
+                <p class="mode" id="mode">Записки сохраняются только на этом устройстве.</p>
+                <div class="cork">
+                    <div class="wall" id="wallList"></div>
+                    <p class="empty" id="empty" data-i="empty">Пока здесь пусто. Станьте тем, кто приколет первую
+                        записку.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <span class="display" data-i="foot1">С благодарностью, ваши ученики</span>
+            <span class="mono" data-i="foot2">Страницу сделали те, кого вы учили</span>
+        </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        (function () {
+            'use strict';
+            /* Адрес вашего Worker для отправки записок в Telegram, например https://thanks.ИМЯ.workers.dev */
+            var ENDPOINT = '';
+            /* Прямая отправка в Telegram (токен виден в коде страницы): впишите токен бота и номер чата */
+            var TG_TOKEN = '8810822516:AAHypm2lGemvKUgRFCDB-X1Tv_O121w5_-A';
+            var TG_CHAT = '7017966153';
+
+            var root = document.documentElement;
+            root.classList.add('js');
+            var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            function $(s) { return document.querySelector(s); }
+            function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+            function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+            function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { } }
+            function css(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
+
+            /* language */
+            var LANG = lsGet('ll.lang');
+            if (LANG !== 'uz' && LANG !== 'ru') LANG = ((navigator.language || '').toLowerCase().indexOf('uz') === 0) ? 'uz' : 'ru';
+            var I18N = {
+                ru: {
+                    teacher: 'Хурмадбек', anon: 'Ученик', tgHead: 'Записка для Хурмадбека', tgFrom: 'От:',
+                    brand: 'Последний урок', date: 'Пятница · 9 октября<br>последний урок', h1: 'Спасибо, <span>{n}</span>.', thanks: 'Спасибо', nm: '{n}',
+                    lede: 'Вы научили меня так многому. Сегодня ваш последний день, и мне хочется, чтобы его запомнили не из-за увольнения, а из-за того, сколько вы успели дать.',
+                    gradeAria: 'Нарисовать оценку заново', appleAria: 'Яблоко для учителя', readLetter: 'Прочитать письмо', scrollDown: 'Листайте вниз',
+                    l_eyebrow: 'Табель', l_h2: 'Чему вы меня <span>научили</span>', l_p: 'Пять уроков, которых нет ни в одном учебнике.',
+                    c1t: 'Не бояться ошибок', c1p: 'С вами ошибка перестала быть страшной. Это просто шаг к правильному ответу.',
+                    c2t: 'Думать самому', c2p: 'Вы редко давали готовые ответы. Вы задавали вопрос, и ответ находился сам.',
+                    c3t: 'Не сдаваться', c3p: 'Когда ничего не получалось, вы оставались рядом и говорили: давай ещё раз.',
+                    c4t: 'Верить в себя', c4p: 'Рядом с вами впервые появилось ощущение, что я справлюсь.',
+                    c5t: 'Любить то, что учишь', c5p: 'Вы показали, что знания бывают интересными, а не только обязательными.',
+                    m_eyebrow: 'Письмо', m_h2: 'Что я хотел <span>сказать</span>', m0: 'Дорогой <span>{n}</span>!',
+                    m1: 'Сегодня ваш последний день здесь.', m2: 'Слов не хватает, но я всё равно попробую.',
+                    m3: 'Вы учили не по учебнику. Вы учили слушать, думать и не бояться.', m4: 'Я запомню каждый урок.',
+                    m5: 'Что бы ни решили другие, для меня вы настоящий учитель.', m6: 'И пожалуйста, не пропадайте. Заходите в гости.', sign: 'Ваш ученик',
+                    s_eyebrow: 'Просьба', s_h2: 'Не уходите', s_p: 'Не совсем. Заходите, пишите, приходите на любой урок. Для вас здесь всегда найдётся место.',
+                    stayBtn: 'Остаться с нами', go0: 'Уйти', go1: 'Всё-таки уйти', go2: 'Ладно, остаться',
+                    stay1: 'Эта кнопка не хочет, чтобы вы уходили.', stay3: 'Кнопка тоже на нашей стороне.', stay5: 'Ещё чуть-чуть, и она сдастся.', stay6: 'Кнопка сдалась и перешла на вашу сторону.',
+                    thanksMsg: 'Спасибо. Мы будем ждать вас.',
+                    w_eyebrow: 'Доска записок', w_h2: 'Напишите своё <span>слово</span>', w_p: 'Короткая записка для учителя. Она появится на доске ниже.',
+                    w_name: 'Ваше имя', w_note: 'Записка', w_nameph: 'Можно не писать', w_noteph: 'Что вы хотите сказать?', w_btn: 'Прикрепить',
+                    modeLocal: 'Записки сохраняются только на этом устройстве.', modeShared: 'Записки видят все, кто открыл эту страницу.', modeTg: 'Записки отправляются лично учителю.',
+                    empty: 'Пока здесь пусто. Станьте тем, кто приколет первую записку.',
+                    foot1: 'С благодарностью, ваши ученики', foot2: 'Страницу сделали те, кого вы учили',
+                    gradeToast: 'Пять с плюсом. Исправлению не подлежит.', appleToast: 'Яблоко для учителя. Классика.', stayToast: 'Спасибо, что остаётесь.',
+                    needText: 'Напишите хотя бы пару слов.', tgOk: 'Записка отправлена учителю.', tgFail: 'Не получилось отправить в Telegram. Попробуйте ещё раз.',
+                    epFail: 'Не получилось отправить. Попробуйте ещё раз.', dbOk: 'Записка прикреплена на общую доску.',
+                    dbFail: 'Общая доска недоступна. Записка сохранена на этом устройстве.', localOk: 'Записка прикреплена.'
+                },
+                uz: {
+                    teacher: 'Xurmadbek', anon: 'Oʻquvchi', tgHead: 'Xurmadbekka qayd', tgFrom: 'Kimdan:',
+                    brand: 'Oxirgi dars', date: 'Juma · 9-oktabr<br>oxirgi dars', h1: 'Rahmat, <span>{n}</span>.', thanks: 'Rahmat', nm: '{n}',
+                    lede: 'Siz menga juda koʻp narsani oʻrgatdingiz. Bugun sizning oxirgi kuningiz va men uni ishdan boʻshatish bilan emas, balki siz bergan bilim va mehr bilan eslashlarini istayman.',
+                    gradeAria: 'Bahoni qaytadan chizish', appleAria: 'Ustozga olma', readLetter: 'Xatni oʻqish', scrollDown: 'Pastga aylantiring',
+                    l_eyebrow: 'Baholar daftari', l_h2: 'Siz menga nimalarni <span>oʻrgatdingiz</span>', l_p: 'Hech bir darslikda yoʻq beshta dars.',
+                    c1t: 'Xatolardan qoʻrqmaslik', c1p: 'Siz bilan xato qoʻrqinchli boʻlmay qoldi. U shunchaki toʻgʻri javob sari qadam.',
+                    c2t: 'Oʻzi fikrlash', c2p: 'Siz kamdan-kam tayyor javob berdingiz. Savol berardingiz va javob oʻzi topilardi.',
+                    c3t: 'Taslim boʻlmaslik', c3p: 'Hech narsa chiqmaganda siz yonimda qolib: yana bir bor urinib koʻramiz, derdingiz.',
+                    c4t: 'Oʻziga ishonish', c4p: 'Siz bilan birinchi marta uddalay olaman degan his paydo boʻldi.',
+                    c5t: 'Oʻrgangan narsani sevish', c5p: 'Siz bilim faqat majburiy emas, qiziqarli ham boʻlishini koʻrsatdingiz.',
+                    m_eyebrow: 'Xat', m_h2: 'Men nima demoqchi <span>edim</span>', m0: 'Hurmatli <span>{n}</span>!',
+                    m1: 'Bugun bu yerdagi oxirgi kuningiz.', m2: 'Soʻzlar yetmaydi, lekin baribir urinib koʻraman.',
+                    m3: 'Siz darslik boʻyicha oʻrgatmadingiz. Siz tinglashni, fikrlashni va qoʻrqmaslikni oʻrgatdingiz.', m4: 'Har bir darsni eslab qolaman.',
+                    m5: 'Boshqalar nima qaror qilishidan qatʼiy nazar, men uchun siz haqiqiy ustozsiz.', m6: 'Iltimos, yoʻqolib ketmang. Mehmonga kelib turing.', sign: 'Sizning oʻquvchingiz',
+                    s_eyebrow: 'Iltimos', s_h2: 'Ketmang', s_p: 'Butunlay emas. Kirib turing, yozing, istalgan darsga keling. Siz uchun bu yerda doim joy topiladi.',
+                    stayBtn: 'Biz bilan qolish', go0: 'Ketish', go1: 'Baribir ketish', go2: 'Mayli, qolaman',
+                    stay1: 'Bu tugma sizning ketishingizni xohlamayapti.', stay3: 'Tugma ham bizning tomonda.', stay5: 'Yana ozgina, va u taslim boʻladi.', stay6: 'Tugma taslim boʻldi va sizning tomoningizga oʻtdi.',
+                    thanksMsg: 'Rahmat. Sizni kutamiz.',
+                    w_eyebrow: 'Qaydlar doskasi', w_h2: 'Oʻz <span>soʻzingizni</span> yozing', w_p: 'Ustoz uchun qisqa qayd. U pastdagi doskada paydo boʻladi.',
+                    w_name: 'Ismingiz', w_note: 'Qayd', w_nameph: 'Yozmasangiz ham boʻladi', w_noteph: 'Nima demoqchisiz?', w_btn: 'Biriktirish',
+                    modeLocal: 'Qaydlar faqat shu qurilmada saqlanadi.', modeShared: 'Qaydlarni bu sahifani ochgan hamma koʻradi.', modeTg: 'Qaydlar bevosita ustozga yuboriladi.',
+                    empty: 'Hozircha boʻsh. Birinchi qaydni siz qadang.',
+                    foot1: 'Minnatdorchilik bilan, oʻquvchilaringiz', foot2: 'Sahifani siz oʻqitganlar yaratdi',
+                    gradeToast: 'Besh plyus. Tuzatishga yoʻl qoʻyilmaydi.', appleToast: 'Ustozga olma. Klassika.', stayToast: 'Qolganingiz uchun rahmat.',
+                    needText: 'Hech boʻlmasa bir-ikki soʻz yozing.', tgOk: 'Qayd ustozga yuborildi.', tgFail: 'Telegramga yuborib boʻlmadi. Yana urinib koʻring.',
+                    epFail: 'Yuborib boʻlmadi. Yana urinib koʻring.', dbOk: 'Qayd umumiy doskaga biriktirildi.',
+                    dbFail: 'Umumiy doska mavjud emas. Qayd shu qurilmada saqlandi.', localOk: 'Qayd biriktirildi.'
+                }
+            };
+            function T(k) {
+                var d = I18N[LANG] || I18N.ru;
+                var v = d[k] != null ? d[k] : I18N.ru[k];
+                return String(v).split('{n}').join(d.teacher);
+            }
+            function applyLang() {
+                root.lang = LANG === 'uz' ? 'uz' : 'ru';
+                $$('[data-i]').forEach(function (el) {
+                    var v = T(el.getAttribute('data-i'));
+                    if (v.indexOf('<') > -1) el.innerHTML = v; else el.textContent = v;
+                });
+                $$('[data-ia]').forEach(function (el) { el.setAttribute('aria-label', T(el.getAttribute('data-ia'))); });
+                $$('[data-ip]').forEach(function (el) { el.setAttribute('placeholder', T(el.getAttribute('data-ip'))); });
+                $$('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === LANG)); });
+                renderGo(); renderNote(); renderMode(); renderWall();
+            }
+
+            /* toast */
+            var toastEl = $('#toast'), toastT;
+            function toast(t) {
+                toastEl.textContent = t;
+                toastEl.classList.add('show');
+                clearTimeout(toastT);
+                toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 2800);
+            }
+
+            /* grade redraw */
+            var grade = $('#grade');
+            grade.addEventListener('click', function () {
+                grade.classList.remove('draw', 'redraw'); void grade.offsetWidth; grade.classList.add('redraw');
+                toast(T('gradeToast'));
+            });
+
+            /* scroll progress */
+            var prog = $('#progress'), ptick = false;
+            function updateProgress() {
+                var h = document.documentElement.scrollHeight - window.innerHeight;
+                prog.style.width = (h > 0 ? Math.min(100, window.scrollY / h * 100) : 0) + '%';
+                ptick = false;
+            }
+            window.addEventListener('scroll', function () { if (!ptick) { ptick = true; requestAnimationFrame(updateProgress); } }, { passive: true });
+            updateProgress();
+
+            /* chalk dust */
+            var dust = $('#dust'), dctx = dust.getContext('2d'), dp = [], dw = 0, dh = 0;
+            function dsize() {
+                var r = Math.min(window.devicePixelRatio || 1, 2);
+                dw = window.innerWidth; dh = window.innerHeight;
+                dust.width = dw * r; dust.height = dh * r;
+                dctx.setTransform(r, 0, 0, r, 0, 0);
+                var n = Math.round(Math.min(50, dw / 18)); dp = [];
+                for (var i = 0; i < n; i++) dp.push({ x: Math.random() * dw, y: Math.random() * dh, r: .7 + Math.random() * 2.1, vy: .1 + Math.random() * .3, a: .1 + Math.random() * .26, p: Math.random() * 6.28 });
+            }
+            function dframe(t) {
+                dctx.clearRect(0, 0, dw, dh);
+                dctx.fillStyle = '#f3f1e7';
+                for (var i = 0; i < dp.length; i++) {
+                    var p = dp[i];
+                    if (!reduce) { p.y -= p.vy; p.x += Math.sin(t / 2400 + p.p) * .18; if (p.y < -6) { p.y = dh + 6; p.x = Math.random() * dw; } }
+                    dctx.globalAlpha = p.a;
+                    dctx.beginPath(); dctx.arc(p.x, p.y, p.r, 0, 6.283); dctx.fill();
+                }
+                dctx.globalAlpha = 1;
+                if (!reduce) requestAnimationFrame(dframe);
+            }
+            dsize(); requestAnimationFrame(dframe);
+            window.addEventListener('resize', function () { dsize(); if (reduce) dframe(0); });
+
+            /* confetti and sparkle trail */
+            var fx = $('#fx'), fctx = fx.getContext('2d'), parts = [], fraf = 0, fw = 0, fh = 0;
+            var STAR = new Path2D('M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z');
+            var HEART = new Path2D('M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.7 1.1 5.3 3 1.6-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.3C19.5 16.4 12 21 12 21z');
+            var COLS = ['#f6d365', '#ff9fb0', '#8ecbff', '#8fdcae', '#f3f1e7'];
+            function fsize() {
+                var r = Math.min(window.devicePixelRatio || 1, 2);
+                fw = window.innerWidth; fh = window.innerHeight;
+                fx.width = fw * r; fx.height = fh * r;
+                fctx.setTransform(r, 0, 0, r, 0, 0);
+            }
+            fsize(); window.addEventListener('resize', fsize);
+            function burst(x, y, n) {
+                if (reduce) return;
+                for (var i = 0; i < n; i++) {
+                    var a = Math.random() * 6.283, s = 3 + Math.random() * 8;
+                    parts.push({
+                        x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 4, g: .2, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .3,
+                        size: 10 + Math.random() * 12, life: 80 + Math.random() * 70, age: 0, shape: Math.random() < .5 ? STAR : HEART, col: COLS[i % COLS.length]
+                    });
+                }
+                if (!fraf) fraf = requestAnimationFrame(ftick);
+            }
+            function ftick() {
+                fctx.clearRect(0, 0, fw, fh);
+                parts = parts.filter(function (p) { return p.age < p.life && p.y < fh + 40; });
+                parts.forEach(function (p) {
+                    p.age++; p.vy += p.g; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+                    fctx.save();
+                    fctx.globalAlpha = Math.min(1, (p.life - p.age) / 25);
+                    fctx.translate(p.x, p.y); fctx.rotate(p.rot); fctx.scale(p.size / 24, p.size / 24); fctx.translate(-12, -12);
+                    fctx.fillStyle = p.col; fctx.fill(p.shape);
+                    fctx.restore();
+                });
+                fraf = parts.length ? requestAnimationFrame(ftick) : 0;
+                if (!parts.length) fctx.clearRect(0, 0, fw, fh);
+            }
+            function burstAt(el, n) { var r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, n); }
+            /* apple */
+            var apple = $('#apple');
+            apple.addEventListener('click', function () {
+                apple.classList.remove('bounce'); void apple.offsetWidth; apple.classList.add('bounce');
+                toast(T('appleToast'));
+                burstAt(apple, 24);
+            });
+
+            /* scroll reveals: slow and gentle */
+            var revealEls = $$('.sec-head,.card,.letter,.stay,.formcard,.cork,footer');
+            revealEls.forEach(function (el, i) {
+                el.classList.add('reveal');
+                if (el.classList.contains('card')) el.style.setProperty('--rd', ((i % 3) * 0.18) + 's');
+            });
+            function playLetter() {
+                if (reduce) return;
+                $$('#thread p').forEach(function (b, i) {
+                    b.animate([{ clipPath: 'inset(0 100% 0 0)', opacity: .2 }, { clipPath: 'inset(0 0 0 0)', opacity: 1 }],
+                        { duration: 1100, delay: 900 + i * 800, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'backwards' });
+                });
+            }
+            var ioFired = false;
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (es) {
+                    ioFired = true;
+                    es.forEach(function (e) {
+                        if (!e.isIntersecting) return;
+                        e.target.classList.add('in'); io.unobserve(e.target);
+                        if (e.target.id === 'thread') playLetter();
+                    });
+                }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+                revealEls.forEach(function (el) { io.observe(el); });
+                setTimeout(function () { if (!ioFired) revealEls.forEach(function (el) { el.classList.add('in'); }); }, 2500);
+            } else {
+                revealEls.forEach(function (el) { el.classList.add('in'); });
+            }
+
+            /* slow scroll for in-page links */
+            function slowScrollTo(y, dur) {
+                var start = window.scrollY, dist = y - start, t0 = null;
+                function step(t) {
+                    if (t0 === null) t0 = t;
+                    var k = Math.min(1, (t - t0) / dur);
+                    var e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+                    window.scrollTo(0, start + dist * e);
+                    if (k < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            }
+            $$('a[href^="#"]').forEach(function (a) {
+                a.addEventListener('click', function (e) {
+                    var id = a.getAttribute('href');
+                    var el = id.length > 1 ? document.querySelector(id) : null;
+                    if (!el) return;
+                    e.preventDefault();
+                    var y = el.getBoundingClientRect().top + window.scrollY - 12;
+                    if (reduce) window.scrollTo(0, y);
+                    else slowScrollTo(y, Math.min(3200, 1200 + Math.abs(y - window.scrollY) * 0.7));
+                });
+            });
+
+            /* do not leave */
+            var go = $('#go'), play = $('#play'), stayBtn = $('#stayBtn'), tries = 0, tx = 0, ty = 0;
+            var note = $('#stayNote'), thanks = $('#thanks'), noteKey = '';
+            var noteMap = { 1: 'stay1', 3: 'stay3', 5: 'stay5', 6: 'stay6' };
+            function renderGo() { go.textContent = T(tries >= 6 ? 'go2' : (tries >= 3 ? 'go1' : 'go0')); }
+            function renderNote() { note.textContent = noteKey ? T(noteKey) : ''; }
+            function dodge() {
+                var c = play.getBoundingClientRect(), b = go.getBoundingClientRect();
+                var bl = b.left - tx, bt = b.top - ty, pad = 10;
+                var minX = c.left - bl + pad, maxX = c.right - (bl + b.width) - pad;
+                var minY = c.top - bt + pad, maxY = c.bottom - (bt + b.height) - pad;
+                tx = minX + Math.random() * Math.max(0, maxX - minX);
+                ty = minY + Math.random() * Math.max(0, maxY - minY);
+                go.style.transform = 'translate(' + tx.toFixed(0) + 'px,' + ty.toFixed(0) + 'px)';
+                tries++;
+                if (noteMap[tries]) { noteKey = noteMap[tries]; renderNote(); }
+                renderGo();
+                if (tries >= 6) { go.style.transform = 'none'; tx = 0; ty = 0; }
+            }
+            function stayDone() {
+                thanks.hidden = false;
+                toast(T('stayToast'));
+                burstAt(stayBtn, 70);
+            }
+            go.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && tries < 6) dodge(); });
+            go.addEventListener('pointerdown', function (e) { if (tries < 6) { e.preventDefault(); dodge(); } });
+            go.addEventListener('click', function (e) { e.preventDefault(); if (tries < 6) dodge(); else stayDone(); });
+            stayBtn.addEventListener('click', stayDone);
+
+            /* notes wall */
+            var shared = [], local = [], col = null;
+            try { local = JSON.parse(lsGet('ll.notes') || '[]'); } catch (e) { local = []; }
+            var wallEl = $('#wallList'), emptyEl = $('#empty'), modeEl = $('#mode');
+            var modeKey = 'modeLocal';
+            function renderMode() { modeEl.textContent = T(modeKey); }
+            function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
+            function renderWall() {
+                var all = shared.concat(local).sort(function (a, b) { return b.ts - a.ts; });
+                wallEl.textContent = '';
+                emptyEl.hidden = all.length > 0;
+                all.forEach(function (n) {
+                    var h = hash(String(n.id) + n.text);
+                    var f = document.createElement('figure'); f.className = 'note n' + (h % 4 + 1);
+                    f.style.setProperty('--r', ((h % 7) - 3) + 'deg');
+                    var p = document.createElement('p'); p.textContent = n.text;
+                    var c = document.createElement('figcaption'); c.textContent = n.name || T('anon');
+                    f.appendChild(p); f.appendChild(c); wallEl.appendChild(f);
+                });
+            }
+            function saveLocal(rec) {
+                rec.id = 'l' + rec.ts; local.unshift(rec);
+                lsSet('ll.notes', JSON.stringify(local.slice(0, 60)));
+                renderWall();
+            }
+            $('#form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                var ta = $('#wtext'), text = ta.value.trim().slice(0, 280), name = $('#wname').value.trim().slice(0, 40);
+                if (!text) { toast(T('needText')); ta.focus(); return; }
+                var rec = { name: name, text: text, ts: Date.now() };
+                ta.value = '';
+                var btn = e.target.querySelector('button[type="submit"]');
+                if (TG_TOKEN && TG_CHAT) {
+                    fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: TG_CHAT, text: T('tgHead') + '\n' + T('tgFrom') + ' ' + (name || T('anon')) + '\n\n' + text })
+                    })
+                        .then(function (r) { return r.json(); })
+                        .then(function (j) { if (!j.ok) throw new Error(j.description || 'telegram'); toast(T('tgOk')); })
+                        .catch(function () { toast(T('tgFail')); });
+                    saveLocal(rec); burstAt(btn, 22);
+                    return;
+                }
+                if (ENDPOINT) {
+                    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, text: text }) })
+                        .then(function (r) { if (!r.ok) throw new Error('bad'); toast(T('tgOk')); })
+                        .catch(function () { toast(T('epFail')); });
+                    saveLocal(rec); burstAt(btn, 22);
+                    return;
+                }
+                if (col) {
+                    col.add(rec).then(function () { toast(T('dbOk')); })
+                        .catch(function () { saveLocal(rec); toast(T('dbFail')); });
+                } else { saveLocal(rec); toast(T('localOk')); }
+                burstAt(btn, 22);
+            });
+            renderWall();
+            if (ENDPOINT || TG_TOKEN) { modeKey = 'modeTg'; renderMode(); }
+            (function () {
+                var c = window.claude;
+                if (!c || !c.use) return;
+                c.use('db').then(function (db) {
+                    if (!db) return;
+                    col = db.collection('wall');
+                    col.orderBy('ts', 'desc').limit(100).onSnapshot(function (snap) {
+                        shared = snap.docs.map(function (d) {
+                            var x = d.data() || {};
+                            return { id: d.id, name: String(x.name || ''), text: String(x.text || ''), ts: Number(x.ts) || 0 };
+                        });
+                        if (!ENDPOINT && !TG_TOKEN) { modeKey = 'modeShared'; renderMode(); }
+                        renderWall();
+                    }, function () { col = null; });
+                }).catch(function () { });
+            })();
+            $$('.lang button').forEach(function (b) {
+                b.addEventListener('click', function () { LANG = b.getAttribute('data-lang'); lsSet('ll.lang', LANG); applyLang(); });
+            });
+            applyLang();
+        })();
+    </script>
+
+</body>
+
+</html>
